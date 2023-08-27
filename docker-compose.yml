@@ -1,0 +1,8 @@
+services:
+  pybay_image:
+    build: .
+    container_name: pybay_image
+    volumes:
+      - .:/code
+    working_dir: /code
+    entrypoint: ["sleep", "infinity"]
