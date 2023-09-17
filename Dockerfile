@@ -1,27 +1,46 @@
-FROM python:3.10
+# STAGING
+FROM python:3.10-slim as staging
+# install gcc
+RUN apt-get update \
+	&& apt-get -y install gcc \
+	&& rm -rf /var/lib/apt/lists/* 
 
-ENV PIP_NO_CACHE_DIR=off \
+# DEVELOPMENT
+FROM staging as development
+ENV \
+	PIP_NO_CACHE_DIR=off \
 	PIP_DISABLE_PIP_VERSION_CHECK=on \
 	PYTHONDONTWRITEBYTECODE=1 \
-	VIRTUAL_ENV=/pybay-venv \
-	POETRY_HOME=/opt/poetry \
+	VIRTUAL_ENV=/pybay-venv 
+ENV \
 	POETRY_VIRTUALENVS_CREATE=false \
 	POETRY_VIRTUALENVS_IN_PROJECT=false \
 	POETRY_NO_INTERACTION=1 \
 	POETRY_VERSION=1.4.2
 
-# System deps:
-# install poetry in it's own venv
-RUN command python -m venv $POETRY_HOME \
-	&& $POETRY_HOME/bin/pip install "poetry==$POETRY_VERSION"
-
-# Copy requirements
+# install poetry 
+RUN pip install "poetry==$POETRY_VERSION"
+# copy requirements
 COPY poetry.lock pyproject.toml ./
 
-# Add poetry and venv to path 
-ENV PATH="$VIRTUAL_ENV/bin:$POETRY_HOME/bin:$PATH"
+# add poetry and venv to path 
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install python packages
 RUN python -m venv $VIRTUAL_ENV \
-	&& . /$VIRTUAL_ENV/bin/activate \
+	&& . $VIRTUAL_ENV/bin/activate \
 	&& poetry install --no-root
+
+# BUILDER
+FROM development as builder
+WORKDIR /app
+COPY . . 
+RUN poetry install
+# export build
+RUN poetry build --format wheel
+
+# PRODUCTION
+FROM staging as production
+WORKDIR /app 
+COPY --from=builder /app/dist/*.whl ./
+RUN pip install ./*.whl
