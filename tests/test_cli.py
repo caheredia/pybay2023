@@ -1,7 +1,10 @@
-from pybay2023.service.cli import fetch_date
 import unittest
-from requests import Response
 from pathlib import Path
+
+from requests import Response
+
+from pybay2023.service.cli import fetch_date
+
 
 class TestFetchDate(unittest.TestCase):
     def test_fetch_date(self):
@@ -11,4 +14,4 @@ class TestFetchDate(unittest.TestCase):
         test_response._content = response_json_path.read_bytes()
         date_str = fetch_date(test_response)
 
-        self.assertEqual(date_str , "2023-09-24T00:53-07:00")
+        self.assertEqual(date_str, "2023-09-24T00:53-07:00")
