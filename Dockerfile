@@ -1,12 +1,12 @@
-# STAGING
-FROM python:3.10-slim as staging
+# BASE
+FROM python:3.11-slim as base
 # install gcc
 RUN apt-get update \
 	&& apt-get -y install gcc \
 	&& rm -rf /var/lib/apt/lists/* 
 
 # DEVELOPMENT
-FROM staging as development
+FROM base as development
 ENV \
 	PIP_NO_CACHE_DIR=off \
 	PIP_DISABLE_PIP_VERSION_CHECK=on \
@@ -23,24 +23,24 @@ RUN pip install "poetry==$POETRY_VERSION"
 # copy requirements
 COPY poetry.lock pyproject.toml ./
 
-# add poetry and venv to path 
+# add venv to path 
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install python packages
 RUN python -m venv $VIRTUAL_ENV \
 	&& . $VIRTUAL_ENV/bin/activate \
-	&& poetry install --no-root
+	&& poetry install
 
 # BUILDER
 FROM development as builder
 WORKDIR /app
 COPY . . 
-RUN poetry install
+RUN poetry install --without dev
 # export build
 RUN poetry build --format wheel
 
 # PRODUCTION
-FROM staging as production
+FROM base as production
 WORKDIR /app 
 COPY --from=builder /app/dist/*.whl ./
 RUN pip install ./*.whl

@@ -2,14 +2,21 @@
 name = "pybay2023"
 version = "0.1.0"
 description = "A demo for packaging python with Poetry, Docker, and Docker Compose"
-authors = ["Your Name <you@example.com>"]
+authors = ["Cristian <tech+cristian@simplelogin.dedyn.io>"]
 readme = "README.md"
 
-[tool.poetry.dependencies]
+[tool.poetry.dependencies] # main dependency group 
 python = "^3.10"
-requests = "^2.31.0"
+requests = "2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+boto3 = "1.28.52"
+black = "23.9.1"
+isort = "5.12.0"
+flake8 = "6.1.0"
+mypy = "1.5.1"
+types-requests = "2.31.0.3"
 jupyter = "^1.0.0"
-pandas = "^2.0.3"
 
 [tool.poetry.scripts]
 pybay2023 = "pybay2023.service.cli:fetch_date"

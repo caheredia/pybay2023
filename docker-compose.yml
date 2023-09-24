@@ -1,10 +1,10 @@
 services:
   pybay_image:
+    container_name: pybay_image
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
-    container_name: pybay_image
+      target: development
     volumes:
       - .:/code
     working_dir: /code
