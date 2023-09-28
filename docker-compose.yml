@@ -6,6 +6,6 @@ services:
       dockerfile: Dockerfile
       target: development
     volumes:
-      - .:/code
-    working_dir: /code
+      - .:/app
+    working_dir: /app
     entrypoint: ["sleep", "infinity"]

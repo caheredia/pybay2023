@@ -11,6 +11,7 @@ ENV \
 	PIP_NO_CACHE_DIR=off \
 	PIP_DISABLE_PIP_VERSION_CHECK=on \
 	PYTHONDONTWRITEBYTECODE=1 \
+	PYTHONUNBUFFERED=1 \
 	VIRTUAL_ENV=/pybay-venv 
 ENV \
 	POETRY_VIRTUALENVS_CREATE=false \
@@ -29,7 +30,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # Install python packages
 RUN python -m venv $VIRTUAL_ENV \
 	&& . $VIRTUAL_ENV/bin/activate \
-	&& poetry install
+	&& poetry install --no-root
 
 # BUILDER
 FROM development as builder
@@ -44,3 +45,4 @@ FROM base as production
 WORKDIR /app 
 COPY --from=builder /app/dist/*.whl ./
 RUN pip install ./*.whl
+RUN rm ./*.whl

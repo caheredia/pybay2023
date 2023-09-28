@@ -1,11 +1,15 @@
 {
-  "$id": "1",
-  "currentDateTime": "2023-09-24T00:53-07:00",
-  "utcOffset": "-07:00:00",
-  "isDayLightSavingsTime": true,
-  "dayOfTheWeek": "Sunday",
-  "timeZoneName": "Pacific Standard Time",
-  "currentFileTime": 133399904232497098,
-  "ordinalDate": "2023-267",
-  "serviceResponse": null
+  "year": 2023,
+  "month": 9,
+  "day": 27,
+  "hour": 22,
+  "minute": 0,
+  "seconds": 29,
+  "milliSeconds": 707,
+  "dateTime": "2023-09-27T22:00:29.7077988",
+  "date": "09/27/2023",
+  "time": "22:00",
+  "timeZone": "America/Los_Angeles",
+  "dayOfWeek": "Wednesday",
+  "dstActive": true
 }
