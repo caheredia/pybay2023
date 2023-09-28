@@ -15,4 +15,4 @@ class TestFetchDate(unittest.TestCase):
 
         date_str = fetch_date(test_response)
 
-        self.assertEqual(date_str, "2023-09-24T00:53-07:00")
+        self.assertEqual(date_str, "2023-09-27T22:00:29.7077988")

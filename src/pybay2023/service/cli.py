@@ -11,4 +11,7 @@ def fetch_date(response: Optional[Response] = None) -> str:
         response = requests.get(TIME_URL)
 
     response.raise_for_status()
-    return response.json()["dateTime"]
+    date_str = response.json()["dateTime"]
+
+    print(f"PyBay2023, \nThe time is: {date_str}\n")
+    return date_str
